@@ -1,0 +1,1 @@
+This is the completed version of the Week 3 MeetMeUp Challenge, with no MVC or XCTest

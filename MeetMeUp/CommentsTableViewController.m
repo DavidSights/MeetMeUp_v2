@@ -20,43 +20,22 @@
 
 @implementation CommentsTableViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.meetup.com/2/event_comments?&sign=true&photo-host=public&event_id=%@&page=20&key=4b6a576833454113112e241936657e47",self.event.eventID]];
-
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:[NSOperationQueue mainQueue]
-                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-
-                               NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-
-                               NSArray *jsonArray = [dict objectForKey:@"results"];
-
-                               self.dataArray = [Comment objectsFromArray:jsonArray];
-                               [self.tableView reloadData];
-                           }];
-
+    [self.event retrieveComments:^(NSArray *dataArray) {
+        self.dataArray = dataArray;
+        [self.tableView reloadData];
+    }];
     self.dateFormatter = [[NSDateFormatter alloc]init];
     [self.dateFormatter setDateStyle:NSDateFormatterShortStyle];
 }
 
-
-#pragma mark - Table view data source
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
     return self.dataArray.count;
 }
 
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     CommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
-    
     Comment *c = self.dataArray[indexPath.row];
     cell.authorLabel.text = c.author;
     cell.commentLabel.text = c.text;
@@ -64,15 +43,12 @@
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     MemberViewController *memberVC = [segue destinationViewController];
-
     Comment *comment = self.dataArray[[self.tableView indexPathForSelectedRow].row];
     memberVC.memberID = comment.memberID;
 }

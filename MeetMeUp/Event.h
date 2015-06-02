@@ -23,5 +23,7 @@
 
 + (NSArray *)eventsFromArray:(NSArray *)incomingArray;
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
++(void)retrieveEventsWithString:(NSString *)keyword andCompletion:(void (^)(NSArray *))complete;
+-(void)retrieveComments:(void(^)(NSArray *dataArray))comeplete;
 
 @end

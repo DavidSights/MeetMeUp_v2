@@ -31,9 +31,7 @@
     self.countLabel.text = self.event.RSVPCount;
     self.hostedByLabel.text = self.event.hostedBy;
     self.descriptionTextview.text = self.event.eventDescription;
-
-
-    self.navigationItem.rightBarButtonItem.title = @"MEHH";
+    self.navigationItem.rightBarButtonItem.title = @"Comments";
 
 }
 
@@ -42,13 +40,14 @@
     if ([[segue identifier]isEqualToString:@"webSegue"]) {
         WebViewController *webVC = [segue destinationViewController];
         webVC.eventURL = self.event.eventURL;
-        
     }
     if ([[segue identifier]isEqualToString:@"commentSegue"]) {
-        CommentsTableViewController *commentTable = [segue destinationViewController];
-        commentTable.event = self.event;
-        
+        NSLog(@"Loading comments view controller");
+        CommentsTableViewController *dvc = segue.destinationViewController;
+        dvc.event = self.event;
     }
 }
+
+
 
 @end

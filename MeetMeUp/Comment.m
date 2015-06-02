@@ -11,38 +11,31 @@
 @implementation Comment
 
 
-- (instancetype)initWithDictionary:(NSDictionary *)dictionary
-{
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     self = [super init];
     if (self) {
-        
+        NSLog(@"Commnts called!");
         self.author = dictionary[@"member_name"];
         self.date = [Comment dateFromNumber:dictionary[@"time"]];
         self.text = dictionary[@"comment"];
-        
         self.memberID = dictionary[@"member_id"];
     }
     return self;
 }
 
-+ (NSArray *)objectsFromArray:(NSArray *)incomingArray
-{
++ (NSArray *)objectsFromArray:(NSArray *)incomingArray {
     NSMutableArray *newArray = [[NSMutableArray alloc] initWithCapacity:incomingArray.count];
-    
     for (NSDictionary *d in incomingArray) {
         Comment *e = [[Comment alloc]initWithDictionary:d];
         [newArray addObject:e];
-        
     }
     return newArray;
 }
 
-+ (NSDate *) dateFromNumber:(NSNumber *)number
-{
++ (NSDate *) dateFromNumber:(NSNumber *)number {
     NSNumber *time = [NSNumber numberWithDouble:([number doubleValue] )];
     NSTimeInterval interval = [time doubleValue];
     return  [NSDate dateWithTimeIntervalSince1970:interval];
-    
 }
 
 @end
